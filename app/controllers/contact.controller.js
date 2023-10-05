@@ -36,7 +36,7 @@ exports.findAll = async(req, res, next) => {
 exports.findOne = async(req, res, next) => {
     try {
         const contactService = new ContactService(MongoDB.client);
-        const document = await contactService(MongoDB.client);
+        const document = await contactService.findById(req.params.id);
         if(!document){
             return next(new ApiError(404,"Contact not found"));
         }
@@ -51,9 +51,9 @@ exports.findOne = async(req, res, next) => {
     }
 };
 exports.update = async(req, res, next) => {
-   if(Object.keys(req.body).length == 0){
-    return next(new ApiError(400, "Data to update can not empty"))
-   }
+    if(Object.keys(req.body).length == 0){
+        return next(new ApiError(400, "Data to update can not empty"))
+    }
     try {
     const contactService = new ContactService(MongoDB.client);
     const document = await contactService.update(req.params.id, req.body);
